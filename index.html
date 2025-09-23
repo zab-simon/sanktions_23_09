@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sanctions Forecast Dashboard — 23.09.2025</title>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <style>
+    body {
+      background-color: #000000;
+      color: white;
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    h1, h2 {
+      color: #0091FF;
+    }
+    .kpi-container {
+      display: flex;
+      justify-content: space-around;
+      margin: 20px 0;
+    }
+    .kpi-card {
+      background-color: #222222;
+      color: white;
+      border-radius: 6px;
+      padding: 15px;
+      width: 22%;
+      text-align: center;
+      box-shadow: 0px 2px 5px rgba(0,0,0,0.4);
+    }
+    .kpi-title {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+    .kpi-value {
+      font-size: 18px;
+      margin: 4px 0;
+    }
+    .arrow-up { color: #0091FF; }
+    .arrow-down { color: #FF6F00; }
+    .arrow-stable { color: #B0B0B0; }
+  </style>
+</head>
+<body>
+
+<h1>🌍 Sanctions Forecast Dashboard — 23 Sept 2025</h1>
+
+<!-- 1. Probabilities -->
+<h2>📊 Probabilities</h2>
+<div id="probabilities"></div>
+
+<!-- 2. Risk Heatmap -->
+<h2>📉 Risk Heatmap</h2>
+<div id="risk_heatmap"></div>
+
+<!-- 3. Scenario Analysis -->
+<h2>🔮 Scenario Analysis</h2>
+<div id="scenario_analysis"></div>
+
+<!-- 4. Risk/Impact Heatmap -->
+<h2>🌡 Risk/Impact Heatmap</h2>
+<div id="risk_impact_heatmap"></div>
+
+<!-- 5. Event Timeline -->
+<h2>🧭 Event Timeline</h2>
+<div id="event_timeline"></div>
+
+<!-- 6. Confidence Levels -->
+<h2>🔒 Confidence Levels</h2>
+<div id="confidence_levels"></div>
+
+<!-- 7. KPI Widgets -->
+<h2>📑 KPI Widgets</h2>
+<div class="kpi-container">
+  <div class="kpi-card">
+    <div class="kpi-title">🇺🇸 US</div>
+    <div class="kpi-value">Tightening: 42% <span class="arrow-up">↑</span></div>
+    <div class="kpi-value">Status Quo: 46% <span class="arrow-down">↓</span></div>
+    <div class="kpi-value">Easing: 12% <span class="arrow-stable">→</span></div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-title">🇬🇧 UK</div>
+    <div class="kpi-value">Tightening: 38% <span class="arrow-stable">→</span></div>
+    <div class="kpi-value">Status Quo: 47% <span class="arrow-down">↓</span></div>
+    <div class="kpi-value">Easing: 15% <span class="arrow-up">↑</span></div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-title">🇪🇺 EU</div>
+    <div class="kpi-value">Tightening: 35% <span class="arrow-stable">→</span></div>
+    <div class="kpi-value">Status Quo: 47% <span class="arrow-down">↓</span></div>
+    <div class="kpi-value">Easing: 18% <span class="arrow-up">↑</span></div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-title">🌍 Global West</div>
+    <div class="kpi-value">Tightening: 38% <span class="arrow-stable">→</span></div>
+    <div class="kpi-value">Status Quo: 47% <span class="arrow-stable">→</span></div>
+    <div class="kpi-value">Easing: 15% <span class="arrow-stable">→</span></div>
+  </div>
+</div>
+
+<script>
+  // === Probabilities Bar Chart ===
+  var prob_data = [
+    {x: ["US","UK","EU","Global West"], y: [12,15,18,15], type: "bar", name:"Easing", marker:{color:"#0091FF"}},
+    {x: ["US","UK","EU","Global West"], y: [46,47,47,47], type: "bar", name:"Status Quo", marker:{color:"#B0B0B0"}},
+    {x: ["US","UK","EU","Global West"], y: [42,38,35,38], type: "bar", name:"Tightening", marker:{color:"#FF6F00"}}
+  ];
+  Plotly.newPlot("probabilities", prob_data, {barmode:"group", template:"plotly_dark"});
+
+  // === Risk Heatmap ===
+  var risk_heatmap = {
+    z: [[12,46,42],[15,47,38],[18,47,35],[15,47,38]],
+    x: ["Easing","Status Quo","Tightening"],
+    y: ["US","UK","EU","Global West"],
+    type: "heatmap",
+    colorscale:"RdBu"
+  };
+  Plotly.newPlot("risk_heatmap", [risk_heatmap], {template:"plotly_dark"});
+
+  // === Scenario Analysis ===
+  var scenario_data = [
+    {x:["USD/RUB","OFZ10Y","MOEX Index","Banks","Exporters"], y:[-5,-0.5,4,6,3], type:"bar", name:"Optimistic (Easing)", marker:{color:"#0091FF"}},
+    {x:["USD/RUB","OFZ10Y","MOEX Index","Banks","Exporters"], y:[0,0,0,0,0], type:"bar", name:"Base (Status Quo)", marker:{color:"#B0B0B0"}},
+    {x:["USD/RUB","OFZ10Y","MOEX Index","Banks","Exporters"], y:[8,0.7,-6,-9,2], type:"bar", name:"Pessimistic (Tightening)", marker:{color:"#FF6F00"}}
+  ];
+  Plotly.newPlot("scenario_analysis", scenario_data, {barmode:"group", template:"plotly_dark"});
+
+  // === Risk/Impact Heatmap ===
+  var risk_impact = {
+    z: [[-5,0,8],[-0.5,0,0.7],[4,0,-6],[6,0,-9],[3,0,2]],
+    x: ["Optimistic (Easing)","Base (Status Quo)","Pessimistic (Tightening)"],
+    y: ["USD/RUB","OFZ10Y","MOEX Index","Banks","Exporters"],
+    type:"heatmap",
+    colorscale:"RdBu"
+  };
+  Plotly.newPlot("risk_impact_heatmap", [risk_impact], {template:"plotly_dark"});
+
+  // === Event Timeline ===
+  var timeline_data = [
+    {x:["2025-07-01","2025-07-15","2025-08-10","2025-09-05","2025-09-18"], y:[34,35,32,36,38], type:"scatter", mode:"lines+markers", name:"Tightening", line:{color:"#FF6F00"}},
+    {x:["2025-07-01","2025-07-15","2025-08-10","2025-09-05","2025-09-18"], y:[50,48,47,46,47], type:"scatter", mode:"lines+markers", name:"Status Quo", line:{color:"#B0B0B0"}},
+    {x:["2025-07-01","2025-07-15","2025-08-10","2025-09-05","2025-09-18"], y:[16,17,21,18,15], type:"scatter", mode:"lines+markers", name:"Easing", line:{color:"#0091FF"}}
+  ];
+  Plotly.newPlot("event_timeline", timeline_data, {template:"plotly_dark"});
+
+  // === Confidence Levels ===
+  var conf_data = [
+    {x:["US","UK","EU","Global West"], y:[1,1,1,1], type:"bar", marker:{color:["#B0B0B0","#B0B0B0","#FF6F00","#B0B0B0"]}, text:["Medium","Medium","Low","Medium"], textposition:"inside"}
+  ];
+  Plotly.newPlot("confidence_levels", conf_data, {template:"plotly_dark", yaxis:{visible:false}});
+</script>
+
+</body>
+</html>
