@@ -1,4 +1,3 @@
-
 import React from "react";
 import {
   PieChart,
@@ -16,6 +15,15 @@ import {
   Bar
 } from "recharts";
 import { motion } from "framer-motion";
+
+// Minimal Card wrappers (since no UI library installed)
+const Card = ({ children, className }) => (
+  <div className={className}>{children}</div>
+);
+
+const CardContent = ({ children }) => (
+  <div className="p-6">{children}</div>
+);
 
 const scenarioData = [
   { name: "Relief", value: 28 },
